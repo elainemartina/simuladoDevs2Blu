@@ -8,51 +8,63 @@ namespace Simulado
 {
     internal class Program
     {
-        static void Main(string[] args) // Falta terminar
+        static void Main(string[] args) 
         {
-            List<int> numeros = new List<int>(3);
-            List<int> numerosOrdenados = new List<int>(3);
+            string[] palavras = { "uva", "manga", "laranja", "morango", "maça", "abacaxi", "banana", "acerola", "manga", "goiaba" };
 
-            Console.WriteLine("Digite uma lista de 3 números");
-            for (int i = 0; i < 3; i++)
+            Random random = new Random();
+            string palavra = palavras[random.Next(palavras.Length)];
+            char[] letrasAdivinhadas = new char[palavra.Length];
+
+            for (int i = 0; i < letrasAdivinhadas.Length; i++)
             {
-                int numero = int.Parse(Console.ReadLine());
-                numeros.Add(numero);
+                letrasAdivinhadas[i] = '_';
             }
-            /*
-            for (int i = 0; i < numeros.Count; i++)
-            {
-                numerosOrdenados.Add(numeros[i]);
-                if (numeros[i] < numerosOrdenados[0])
-                {
-                    numerosOrdenados[0] = numeros[i];
-                    numerosOrdenados[i] = numeros[0];
-                }
-                else
-                {
-                    numerosOrdenados[i] = numeros[i];
-                }
-            }*/
 
-            for (int z = 0; z < numeros.Count; z++)
+            bool acabou = false;
+            int tentativasRestantes = 10;
+
+            Console.WriteLine("Dica: É uma fruta!");
+            while (!acabou)
             {
-                if (z == 0)
+                Console.WriteLine(letrasAdivinhadas);
+                Console.WriteLine("Tentativas restantes: " + tentativasRestantes);
+
+                Console.Write("\nDigite uma letra: ");
+                char letra = char.Parse(Console.ReadLine());
+
+                bool achouLetra = false;
+                for (int i = 0; i < palavra.Length; i++)
                 {
-                    numerosOrdenados[0] = numeros[0];
-                }
-                foreach (var i in numeros)
-                {
-                    if (numeros[i] < numerosOrdenados[z])
+                    if (palavra[i] == letra)
                     {
-                        numerosOrdenados[z] = numeros[i];
+                        letrasAdivinhadas[i] = letra;
+                        achouLetra = true;
                     }
                 }
-            }
 
-            Console.WriteLine("Lista ordenada:");
-            for (int i = 0; i < numerosOrdenados.Count; i++)
-            {
-                Console.Write(numerosOrdenados[i] + " ");
+                if (!achouLetra)
+                {
+                    tentativasRestantes--;
+                    Console.WriteLine("A letra " + letra + " não está na palavra.");
+
+                    if (tentativasRestantes == 0)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Você não tem mais tentativas.");
+                        Console.WriteLine("A palavra era: " + palavra);
+
+                        acabou = true;
+                    }
+                }
+
+                if (new string(letrasAdivinhadas) == palavra)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Parabéns! Você acertou a palavra: " + palavra);
+
+                    acabou = true;
+                }
             }
 
             Console.ReadKey();
